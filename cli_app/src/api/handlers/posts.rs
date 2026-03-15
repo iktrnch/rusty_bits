@@ -3,6 +3,8 @@ use std::sync::Arc;
 use axum::Extension;
 use axum::extract::{Json, Path, State};
 use axum::http::StatusCode;
+use serde::Deserialize;
+use utoipa::IntoParams;
 
 use crate::api::errors::AppError;
 use crate::api::response::TokenClaims;
@@ -11,6 +13,15 @@ use crate::services::post::PostService;
 use crate::services::post::{CreatePostRequest, UpdatePostRequest};
 use crate::state::ApplicationState;
 
+#[utoipa::path(
+    post,
+    path = "/posts",
+    tag = "posts",
+    request_body = CreatePostRequest,
+    responses(
+        (status=200, description = "Post create", body = SinglePostResponse)
+    ),
+)]
 pub async fn create(
     Extension(_claims): Extension<TokenClaims>,
     State(state): State<Arc<ApplicationState>>,
@@ -22,6 +33,18 @@ pub async fn create(
     Ok(Json(responce))
 }
 
+#[utoipa::path(
+    put,
+    path = "/posts/{id}",
+    params(
+        ("id" = i64, Path, description="ID of the post"),
+    ),
+    tag = "posts",
+    request_body = UpdatePostRequest,
+    responses(
+        (status = 200, description = "Post updates", body = SinglePostResponse),
+    ),
+)]
 pub async fn update(
     State(state): State<Arc<ApplicationState>>,
     Path(id): Path<i64>,
@@ -34,6 +57,23 @@ pub async fn update(
     Ok(Json(response))
 }
 
+#[derive(Deserialize, Debug, IntoParams)]
+#[into_params(parameter_in = Query)]
+pub struct PagingParams {
+    /// Page number
+    pub page: i64,
+    /// Items per page
+    pub per_page: i64,
+}
+
+#[utoipa::path(
+    get,
+    path = "/posts",
+    tag = "posts",
+    responses(
+        (status = 200, description = "List of posts", body = ListPostsResponse),
+    ),
+)]
 pub async fn list(
     State(state): State<Arc<ApplicationState>>,
 ) -> Result<Json<ListPostsResponse>, AppError> {
@@ -44,6 +84,17 @@ pub async fn list(
     Ok(Json(response))
 }
 
+#[utoipa::path(
+    get,
+    path = "/posts/{slug}",
+    tag = "posts",
+    params(
+        ("slug" = String, Path, description = "Slug of the post"),
+    ),
+    responses(
+        (status = 200, description = "Post", body = SinglePostResponse),
+    ),
+)]
 pub async fn get(
     State(state): State<Arc<ApplicationState>>,
     Path(slug): Path<String>,
@@ -60,6 +111,17 @@ pub async fn get(
     }
 }
 
+#[utoipa::path(
+    delete,
+    path = "/posts/{id}",
+    tag = "posts",
+    params(
+        ("id" = i64, Path, description = "ID of the post"),
+    ),
+    responses(
+        (status = 200, description = "Post deleted"),
+    ),
+)]
 pub async fn delete(
     State(state): State<Arc<ApplicationState>>,
     Path(id): Path<i64>,

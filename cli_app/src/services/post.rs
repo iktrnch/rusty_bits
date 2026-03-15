@@ -3,6 +3,7 @@ use serde::Deserialize;
 use sqlx::MySqlPool;
 use std::collections::HashMap;
 use tokio::sync::Mutex;
+use utoipa::ToSchema;
 
 #[allow(async_fn_in_trait)]
 pub trait PostService {
@@ -14,7 +15,7 @@ pub trait PostService {
     async fn delete_post(&self, id: i64) -> anyhow::Result<()>;
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
 pub struct CreatePostRequest {
     pub author_id: i64,
     pub slug: String,
@@ -23,7 +24,7 @@ pub struct CreatePostRequest {
     pub status: PostStatus,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
 pub struct UpdatePostRequest {
     pub slug: String,
     pub title: String,

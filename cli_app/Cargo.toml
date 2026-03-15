@@ -22,3 +22,5 @@ argon2 = "0.5"
 password-hash = { version = "0.5", features = ["getrandom"] }
 sqlx = { version = "0.7", features = [ "mysql", "runtime-tokio",
  "tls-rustls", "chrono", "macros" ] }
+utoipa = { version = "4.2.0", features = ["axum_extras", "chrono"] }
+utoipa-swagger-ui = { version = "6", features = ["axum"] }

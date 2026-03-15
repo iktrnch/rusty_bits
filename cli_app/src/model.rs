@@ -4,6 +4,7 @@ use chrono::{DateTime, Utc};
 use password_hash::rand_core::OsRng;
 use password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 #[derive(Copy, Clone, Serialize, Deserialize)]
 pub enum UserStatus {
@@ -41,7 +42,7 @@ pub struct User {
     pub last_login: Option<DateTime<Utc>>,
 }
 
-#[derive(Copy, Clone, Serialize, Deserialize)]
+#[derive(Copy, Clone, Serialize, Deserialize, ToSchema)]
 pub enum PostStatus {
     Draft = 1,
     Published = 2,
@@ -66,7 +67,7 @@ impl From<PostStatus> for i32 {
     }
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ToSchema)]
 pub struct Post {
     pub id: i64,
     pub author_id: i64,
