@@ -1,6 +1,7 @@
 use axum::extract::State;
 use axum::http::StatusCode;
 use std::sync::Arc;
+use tracing::instrument;
 
 use crate::state::ApplicationState;
 
@@ -12,6 +13,7 @@ use crate::state::ApplicationState;
         (status = 200, description = "Hello World", body = String),
     )
 )]
+#[instrument(skip(state))]
 pub async fn hello(State(state): State<Arc<ApplicationState>>) -> Result<String, StatusCode> {
     Ok(format!(
         "\nHello, World! Using configuration from {}\n\n",

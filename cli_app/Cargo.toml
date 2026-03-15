@@ -10,17 +10,21 @@ config = "0.14"
 dotenv = "0.15"
 serde = { version = "1", features = ["derive"] }
 axum = "0.7.4"
-tokio = { version = "1.35.1", features = ["full"] }
-arc-swap = "1.8.2"
+tokio = { version = "1.37", features = ["full"] }
+arc-swap = "1.7"
 tracing = { version = "0.1", features = ["log"] }
-tracing-log = { version = "0.1" }
-tracing-subscriber = { version = "0.2", features = ["registry", "env-filter"] }
+tracing-log = { version = "0.2" }
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
 tower-http = { version = "0.5", features = ["trace"] }
-chrono = {  version = "0.4.34", features = ["serde"] }
-jsonwebtoken = "8.3.0"
+chrono = {  version = "0.4", features = ["serde"] }
+axum-macros = "0.4"
+jsonwebtoken = "9.3"
 argon2 = "0.5"
 password-hash = { version = "0.5", features = ["getrandom"] }
-sqlx = { version = "0.7", features = [ "mysql", "runtime-tokio",
- "tls-rustls", "chrono", "macros" ] }
+sqlx = { version = "0.7", features = [ "mysql", "runtime-tokio", "tls-rustls", "chrono" ] }
 utoipa = { version = "4.2.0", features = ["axum_extras", "chrono"] }
 utoipa-swagger-ui = { version = "6", features = ["axum"] }
+opentelemetry = { version = "0.27", features = ["metrics", "logs"] }
+opentelemetry_sdk = { version = "0.27", features = ["rt-tokio", "logs"] }
+opentelemetry-otlp = { version = "0.27", features = ["tonic", "http-json", "metrics", "logs", "reqwest-client", "reqwest-rustls"]  }
+tracing-opentelemetry = "0.28.0"
