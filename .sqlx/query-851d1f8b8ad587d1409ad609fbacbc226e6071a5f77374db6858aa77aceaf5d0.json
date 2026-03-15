@@ -1,0 +1,12 @@
+{
+  "db_name": "MySQL",
+  "query": "\n                INSERT INTO posts (author_id, slug, title, content, status, created, updated)\n                VALUES (?, ?, ?, ?, ?, NOW(), NOW())\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "851d1f8b8ad587d1409ad609fbacbc226e6071a5f77374db6858aa77aceaf5d0"
+}

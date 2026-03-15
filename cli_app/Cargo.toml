@@ -20,3 +20,5 @@ chrono = {  version = "0.4.34", features = ["serde"] }
 jsonwebtoken = "8.3.0"
 argon2 = "0.5"
 password-hash = { version = "0.5", features = ["getrandom"] }
+sqlx = { version = "0.7", features = [ "mysql", "runtime-tokio",
+ "tls-rustls", "chrono", "macros" ] }

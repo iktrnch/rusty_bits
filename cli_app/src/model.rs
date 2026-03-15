@@ -11,6 +11,25 @@ pub enum UserStatus {
     Blocked = 2,
 }
 
+impl From<i32> for UserStatus {
+    fn from(value: i32) -> Self {
+        match value {
+            1 => UserStatus::Active,
+            2 => UserStatus::Blocked,
+            _ => UserStatus::Active,
+        }
+    }
+}
+
+impl From<UserStatus> for i32 {
+    fn from(value: UserStatus) -> Self {
+        match value {
+            UserStatus::Active => 1,
+            UserStatus::Blocked => 2,
+        }
+    }
+}
+
 #[derive(Clone, Serialize)]
 pub struct User {
     pub id: i64,
@@ -26,6 +45,25 @@ pub struct User {
 pub enum PostStatus {
     Draft = 1,
     Published = 2,
+}
+
+impl From<i32> for PostStatus {
+    fn from(value: i32) -> Self {
+        match value {
+            1 => PostStatus::Draft,
+            2 => PostStatus::Published,
+            _ => PostStatus::Draft,
+        }
+    }
+}
+
+impl From<PostStatus> for i32 {
+    fn from(value: PostStatus) -> Self {
+        match value {
+            PostStatus::Draft => 1,
+            PostStatus::Published => 2,
+        }
+    }
 }
 
 #[derive(Clone, Serialize)]

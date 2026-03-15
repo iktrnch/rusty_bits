@@ -9,9 +9,6 @@ use tracing::level_filters::LevelFilter;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, layer::SubscriberExt};
 
-use crate::model::UserStatus;
-use crate::model::encrypt_password;
-use crate::services::user::{CreateUserRequest, UserService};
 use crate::{settings::Settings, state::ApplicationState};
 
 pub const COMMAND_NAME: &str = "serve";
@@ -47,15 +44,15 @@ fn start_tokio(port: u16, settings: &Settings) -> anyhow::Result<()> {
 
             subscriber.init();
 
-            let state = Arc::new(ApplicationState::new(settings)?);
-            state
-                .user_service
-                .create_user(CreateUserRequest {
-                    username: "admin".to_string(),
-                    password: encrypt_password("admin")?,
-                    status: UserStatus::Active,
-                })
-                .await?;
+            let db_url = settings
+                .database
+                .url
+                .clone()
+                .expect("Database URL is not set");
+
+            let pool = sqlx::MySqlPool::connect(&db_url).await?;
+
+            let state = Arc::new(ApplicationState::new(settings, pool)?);
 
             let router = crate::api::configure(state).layer(TraceLayer::new_for_http());
 

@@ -1,0 +1,12 @@
+{
+  "db_name": "MySQL",
+  "query": "\n                UPDATE posts\n                SET slug = ?, title = ?, content = ?, status = ?, updated = NOW()\n                WHERE id = ?\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 5
+    },
+    "nullable": []
+  },
+  "hash": "0ac4ed12b55fc63f325f61332543847d84abe354e8b6db227bd9b791193ec14b"
+}
