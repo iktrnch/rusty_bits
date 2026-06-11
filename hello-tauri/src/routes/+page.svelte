@@ -1,17 +1,35 @@
 <script lang="ts">
     import { invoke } from "@tauri-apps/api/core";
+    import { open as openFileDialog } from "@tauri-apps/plugin-dialog";
 
     let documentText = "";
     let cursorPosition = 0;
     let saved_state = "saved";
+    let document_name = "untitled.txt";
 
     function updateCursor(event: Event) {
         const editor = event.currentTarget as HTMLTextAreaElement;
         cursorPosition = editor.selectionStart;
     }
 
-    function open() {
-        invoke<string>("open").then((message) => (documentText = message));
+    async function open() {
+        const filePath = await openFileDialog({
+            multiple: false,
+            directory: false,
+        });
+
+        if (!filePath || Array.isArray(filePath)) {
+            return;
+        }
+
+        document_name =
+            filePath.split("/").pop().split("\\").pop() || "untitled.txt";
+
+        invoke<string>("open", { filePath }).then((message) => {
+            documentText = message;
+            cursorPosition = 0;
+            saved_state = "saved";
+        });
     }
 
     function save() {
@@ -32,7 +50,7 @@
                 <h1
                     class="px-4 py-2 font-medium text-gray-600 sm:px-6 dark:text-gray-300"
                 >
-                    New Document
+                    {document_name}
                 </h1>
             </div>
 
