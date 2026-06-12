@@ -6,6 +6,7 @@
     let cursorPosition = 0;
     let saved_state = "saved";
     let document_name = "untitled.txt";
+    let openFilePath = "";
 
     function updateCursor(event: Event) {
         const editor = event.currentTarget as HTMLTextAreaElement;
@@ -21,7 +22,7 @@
         if (!filePath || Array.isArray(filePath)) {
             return;
         }
-
+        openFilePath = filePath;
         document_name =
             filePath.split("/").pop().split("\\").pop() || "untitled.txt";
 
@@ -33,9 +34,11 @@
     }
 
     function save() {
-        invoke("save").then(() => {
-            saved_state = "saved";
-        });
+        invoke("save", { filePath: openFilePath, contents: documentText })
+            .catch((e) => (saved_state = e))
+            .then(() => {
+                saved_state = "saved";
+            });
     }
 </script>
 
